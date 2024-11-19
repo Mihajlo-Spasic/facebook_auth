@@ -34,10 +34,14 @@ public class Main extends selenium_base_class{
     //Main base = new Main();
     //WebDriver driver = base.setUp(base.Browser, base.driver_path, base.browser_options); 
     //driver.get(url);
+    String profilePath = "/home/spale/.mozilla/firefox/hljh1xxy.default";
     System.setProperty("webdriver.gecko.driver", "/usr/bin/geckodriver");
-    FirefoxProfile profile = new FirefoxProfile();;
+    FirefoxProfile profile = new FirefoxProfile(new java.io.File(profilePath));
     FirefoxOptions options = new FirefoxOptions();
     
+    options.addPreference("dom.webdriver.enabled", false);
+    options.addPreference("useAutomationExtension", false);
+    options.setCapability("moz:firefoxOptions", options);
     profile.setPreference("toolkit.telemetry.reportingpolicy.firstRun", false);
     options.setProfile(profile);
     
@@ -45,32 +49,34 @@ public class Main extends selenium_base_class{
     driver.get(url);
     
     WebElement button_google_auth= driver.findElement(By.className("google"));
-    
     String originalWindow = driver.getWindowHandle();
-
     button_google_auth.click();
+    try {
+      Thread.sleep(10000);
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+      }
     Set<String> allWindows = driver.getWindowHandles(); 
     
     for (String windowHandle : allWindows) {
-      System.out.println(windowHandle);
       if (!windowHandle.equals(originalWindow)) {
         driver.switchTo().window(windowHandle);
-          break;
+        break;
         }
       }
+    
+    System.out.println("Current URL: " + driver.getCurrentUrl());
+
     String email = "mihajlosanspasic@gmail.com";
     try{
        List<WebElement> inputs = driver.findElements(By.tagName("input"));
 
             boolean emailEntered = false;
 
-            // Iterate through input fields
             for (WebElement input : inputs) {
-                // Check if the input field is visible and enabled
                 if (input.isDisplayed() && input.isEnabled()) {
                     String type = input.getAttribute("type");
 
-                    // Check if it's a text, email, or search field
                     if (type != null && (type.equals("text") || type.equals("email") || type.equals("search"))) {
                         input.sendKeys(email);
                         System.out.println("Email entered in a field.");
@@ -86,7 +92,6 @@ public class Main extends selenium_base_class{
 
 
 
-      driver.quit();
   }
 }
 
