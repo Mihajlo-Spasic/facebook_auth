@@ -26,6 +26,23 @@
           <version>3.0.0</version>
         </dependency>
       
+        <dependency>
+          <groupId>com.selenium_java</groupId>
+          <artifactId>shared-library</artifactId>
+          <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+       
+        <dependency>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-all</artifactId>
+          <version>4.1.97.Final</version> 
+        </dependency>
+        <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-simple</artifactId>
+          <version>1.7.36</version> <!-- Or the appropriate version -->
+        </dependency>
+
   </dependencies>
 
 	<build>
@@ -44,7 +61,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.5.0</version>
                 <configuration>
-                    <mainClass>com.google_auth_selenium.MainAuth</mainClass> 
+                    <mainClass>com.google_auth_selenium.Main</mainClass> 
                 </configuration>
             </plugin>
     </plugins>
