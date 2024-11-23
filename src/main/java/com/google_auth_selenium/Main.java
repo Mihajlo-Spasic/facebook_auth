@@ -10,6 +10,9 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import java.net.URL;
 import java.time.Duration;
 import java.util.List;
 
@@ -27,10 +30,51 @@ public class Main extends selenium_base_class{
     
   //};
   
+  public static class CustomRemoteWebDriver extends RemoteWebDriver {
+        public CustomRemoteWebDriver(URL remoteAddress, DesiredCapabilities capabilities) {
+            super(remoteAddress, capabilities);
+        }
 
-  public static void main(String[] args){
-    
-    String url = "https://www.kupujemprodajem.com/login";
+        public void setSessionId(String sessionId) {
+            super.setSessionId(sessionId);
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            // Step 1: Manually define the WebDriver server URL
+            String webdriverServerUrl = "http://127.0.0.1:4444/wd/hub";
+
+            // Step 2: Create a new driver and start a session
+            FirefoxOptions options = new FirefoxOptions();
+            WebDriver tempDriver = new RemoteWebDriver(new URL(webdriverServerUrl), options);
+
+            // Step 3: Retrieve session ID and print it
+            String sessionId = ((RemoteWebDriver) tempDriver).getSessionId().toString();
+            System.out.println("Original Session ID: " + sessionId);
+
+            // Step 4: Quit the temporary driver
+            tempDriver.quit();
+
+            // Step 5: Reconnect to the same session
+            DesiredCapabilities capabilities = new DesiredCapabilities();
+            CustomRemoteWebDriver reconnectedDriver = new CustomRemoteWebDriver(new URL(webdriverServerUrl), capabilities);
+            reconnectedDriver.setSessionId(sessionId);
+
+            // Step 6: Perform actions with the reconnected driver
+            reconnectedDriver.get("http://www.example.com");
+            System.out.println("Title after reconnection: " + reconnectedDriver.getTitle());
+
+            // Step 7: Quit the reconnected driver
+            reconnectedDriver.quit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+    String kp_url = "https://www.kupujemprodajem.com/login";
     //Main base = new Main();
     //WebDriver driver = base.setUp(base.Browser, base.driver_path, base.browser_options); 
     //driver.get(url);
@@ -45,8 +89,19 @@ public class Main extends selenium_base_class{
     profile.setPreference("toolkit.telemetry.reportingpolicy.firstRun", false);
     options.setProfile(profile);
     
-    WebDriver driver = new FirefoxDriver(options);
-    driver.get(url);
+
+    //Temporary WebDriver for session params
+    WebDriver temp_driver = new RemoteWebDriver(new URL("http://127.0.0.1:4444/wd/hub"), options);
+    //WebDriver driver = new FirefoxDriver(options);
+    String sessionId = ((RemoteWebDriver) temp_driver).getSessionId().toString();
+    URL remote_url = new URL(kp_url);
+    
+    //temp_driver.quit();
+    
+    WebDriver hijacked_driver = new RemoteWebDriver(remote_url, options);
+    ((RemoteWebDriver) hijacked_driver).setSessionId(sessionId);
+    
+    hijacked_driver.get(kp_url);
     
     WebElement button_google_auth= driver.findElement(By.className("google"));
     String originalWindow = driver.getWindowHandle();
