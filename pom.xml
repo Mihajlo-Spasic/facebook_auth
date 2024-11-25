@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.selenium_java</groupId>
-	<artifactId>google_auth_selenium</artifactId>
+	<artifactId>facebook_auth_selenium</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
   
   <properties>
@@ -66,7 +66,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.5.0</version>
                 <configuration>
-                    <mainClass>com.google_auth_selenium.Main</mainClass> 
+                    <mainClass>com.facebook_auth_selenium.Facebook_auth</mainClass> 
                 </configuration>
             </plugin>
     </plugins>

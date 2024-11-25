@@ -1,0 +1,5 @@
+
+Facebook_auth facebook_auth = new Facebook_auth(driver, url);
+facebook_auth.load_credentials();
+facebook_auth.execute_auth();
+
