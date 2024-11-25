@@ -26,6 +26,10 @@ public class Main extends selenium_base_class{
   
 
   public static void main(String[] args){
+    
+    String email = null;
+    String password = null;
+
     Properties properties = new Properties();
 
     try (InputStream input = Main.class.getClassLoader().getResourceAsStream("config.properties")) {
@@ -34,8 +38,8 @@ public class Main extends selenium_base_class{
         return;
       }
       properties.load(input);
-      String email = properties.getProperty("facebook.email");
-      String password = properties.getProperty("facebook.password");
+      email = properties.getProperty("facebook.email");
+      password = properties.getProperty("facebook.password");
       } catch (IOException ex) {
           ex.printStackTrace();
         }
@@ -100,9 +104,9 @@ public class Main extends selenium_base_class{
         Thread.currentThread().interrupt();
       }
     
-    WebElement login_as = driver.findElement(By.className("x1ja2u2z"));
-    
-    login_as.click(); 
+    WebElement continue_as_button = driver.findElement(By.xpath("//span[contains(text(),'Continue as')]"));
+
+    continue_as_button.click(); 
     try {
       Thread.sleep(10000);
       } catch (InterruptedException e) {
