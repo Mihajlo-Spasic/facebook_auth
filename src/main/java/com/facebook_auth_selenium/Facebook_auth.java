@@ -57,6 +57,7 @@ public class Facebook_auth extends selenium_base_class{
         Thread.currentThread().interrupt();
       }
   }
+
   public void execute_auth(){
     driver.get(url);
     
@@ -111,73 +112,4 @@ public class Facebook_auth extends selenium_base_class{
       driver.switchTo().window(originalWindow);
   }
 
-
-  public static void main(String[] args){
-    
-
-    String profilePath = "/home/spale/.mozilla/firefox/hljh1xxy.default";
-    System.setProperty("webdriver.gecko.driver", "/usr/bin/geckodriver");
-    FirefoxProfile profile = new FirefoxProfile(new java.io.File(profilePath));
-    FirefoxOptions options = new FirefoxOptions();
-    
-    options.addPreference("dom.webdriver.enabled", false);
-    options.addPreference("useAutomationExtension", false);
-    options.setCapability("moz:firefoxOptions", options);
-    profile.setPreference("toolkit.telemetry.reportingpolicy.firstRun", false);
-    options.setProfile(profile);
-    
-    WebDriver driver = new FirefoxDriver(options);
-    driver.get(url);
-    
-    WebElement button_facebook_auth= driver.findElement(By.className("facebook"));
-    String originalWindow = driver.getWindowHandle();
-    button_facebook_auth.click();
-    try {
-      Thread.sleep(10000);
-      } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-      }
-    Set<String> allWindows = driver.getWindowHandles(); 
-    
-    for (String windowHandle : allWindows) {
-      if (!windowHandle.equals(originalWindow)) {
-        driver.switchTo().window(windowHandle);
-        break;
-        }
-      }
-    
-    WebElement email_input= driver.findElement(By.id("email"));
-    email_input.sendKeys(email);
-    try {
-      Thread.sleep(1000);
-      } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-      }
-    WebElement password_input = driver.findElement(By.id("pass"));
-    password_input.sendKeys(password);
-    try {
-      Thread.sleep(1000);
-      } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-      }
-    WebElement continue_button = driver.findElement(By.id("loginbutton")); 
-    continue_button.click();
-    try {
-      Thread.sleep(10000);
-      } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-      }
-    
-    WebElement continue_as_button = driver.findElement(By.xpath("//span[contains(text(),'Continue as')]"));
-
-    continue_as_button.click(); 
-    try {
-      Thread.sleep(10000);
-      } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-      }
-
-      driver.switchTo().window(originalWindow);
-  }
 }
-
