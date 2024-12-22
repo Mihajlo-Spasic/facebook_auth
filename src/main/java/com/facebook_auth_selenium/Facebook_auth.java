@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class Facebook_auth extends selenium_base_class{
+
   public static String Browser = "firefox";
   public static String driver_path = "/usr/bin/geckodriver";
   public String[] browser_options = null; 
@@ -45,7 +46,13 @@ public class Facebook_auth extends selenium_base_class{
       
     } catch (IOException ex) {
           ex.printStackTrace();
-    }
+          
+    };
+  }
+
+  public void load_credentials_env(){
+    email = System.getenv("facebook.email");
+    password = System.getenv("facebook.password");
   }
 
   private void click_button_humanized(String search_text, int timeout){
@@ -61,7 +68,7 @@ public class Facebook_auth extends selenium_base_class{
   public void execute_auth(){
     driver.get(url);
     
-    WebElement button_facebook_auth= driver.findElement(By.className("facebook"));
+    WebElement button_facebook_auth = driver.findElement(By.className("facebook"));
     String originalWindow = driver.getWindowHandle();
     button_facebook_auth.click();
     try {
@@ -78,8 +85,9 @@ public class Facebook_auth extends selenium_base_class{
         }
       }
     
-    WebElement email_input= driver.findElement(By.id("email"));
+    WebElement email_input = driver.findElement(By.id("email"));
     email_input.sendKeys(email);
+    
     try {
       Thread.sleep(1000);
       } catch (InterruptedException e) {
@@ -87,6 +95,7 @@ public class Facebook_auth extends selenium_base_class{
       }
     WebElement password_input = driver.findElement(By.id("pass"));
     password_input.sendKeys(password);
+    
     try {
       Thread.sleep(1000);
       } catch (InterruptedException e) {
@@ -94,6 +103,7 @@ public class Facebook_auth extends selenium_base_class{
       }
     WebElement continue_button = driver.findElement(By.id("loginbutton")); 
     continue_button.click();
+
     try {
       Thread.sleep(10000);
       } catch (InterruptedException e) {
@@ -101,8 +111,8 @@ public class Facebook_auth extends selenium_base_class{
       }
     
     WebElement continue_as_button = driver.findElement(By.xpath("//span[contains(text(),'Continue as')]"));
-
     continue_as_button.click(); 
+    
     try {
       Thread.sleep(10000);
       } catch (InterruptedException e) {
@@ -111,5 +121,4 @@ public class Facebook_auth extends selenium_base_class{
 
       driver.switchTo().window(originalWindow);
   }
-
 }
